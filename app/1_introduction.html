@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello D3.JS</title>
+    
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap-theme.min.css">
+    <style type="text/css">
+      hr {
+        color: #fff;
+      }
+      
+      .circle {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: #00ff00;
+        border-radius: 100%;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+<body>
+  <div class="container">
+    <h1>D3.JS</h1>
+    <h3>Introduction</h3>
+    
+    <p>
+      Paragraph 1
+    </p>
+    <p>
+      Paragraph 2
+    </p>
+    <p>
+      Paragraph 3
+    </p>
+    
+    <hr />
+    
+    <h4>Test 1</h4>
+    <h4>Test 2</h4>
+    <h4>Test 3</h4>
+    
+    <hr  />
+
+    <h4 class="change-color-1">Test 1</h4>
+    <h4 class="change-color-1">Test 2</h4>
+    <h4 class="change-color-1">Test 3</h4>
+    
+    <hr  />
+    
+    <h4 class="change-size-1">Test 1</h4>
+    <h4 class="change-size-1">Test 2</h4>
+    <h4 class="change-size-1">Test 3</h4>
+    
+    <hr  />
+    
+    <h4 class="change-size-2">Test 1</h4>
+    <h4 class="change-size-2">Test 2</h4>
+    <h4 class="change-size-2">Test 3</h4>
+    
+    <hr  />
+    
+    <h4 class="change-size-3">Test 1</h4>
+    <h4 class="change-size-3">Test 2</h4>
+    <h4 class="change-size-3">Test 3</h4>
+    
+    <div class="circle"></div>
+  </div>
+  
+  <script src="/libs/jquery-3.1.0.min.js"></script>
+  <script src="/libs/d3.min.js"></script>
+  <script type="text/javascript">
+    //Change Color of all P
+    d3.selectAll("p").style("color", "yellow");
+
+    d3.select("body").style("background-color", "black");
+
+    d3.selectAll("h4").style("color", function() {
+      return "hsl(" + Math.random() * 360 + ",100%,50%)";
+    });
+    
+    d3.selectAll(".change-color-1").style("color", function(d, i) {
+      return i % 2 ? "#fff" : "#ecaaaa";
+    });
+    
+    //Change size base on array data
+    d3.selectAll(".change-size-1")
+      .data([16, 24, 32, 48, 56, 64])
+      .style("font-size", function(d) { return d + "px"; });
+    
+    //Auto add content in text, if node fewer than data
+    d3.select(".container") //Append to here
+      .selectAll(".change-size-2")
+      .data([4, 8, 15, 16, 23, 42])
+      .enter().append("p") //Container of text
+        .text(function(d) { return "I’m number " + d + "!"; });
+    
+    // Update…
+    var pChangeSize3 = d3.select(".container")
+      .selectAll(".change-size-3")
+      .data([4, 8, 15, 16, 23, 42])
+        .text(function(d) {
+          console.log(d);
+          return d; 
+        });
+    // Enter…
+    pChangeSize3.enter().append("p")
+        .text(function(d) { return d; });
+    // Exit
+    pChangeSize3.exit().remove();
+    
+    //Transition
+    d3.select("body").transition()
+      .duration(3000)
+      .style("background-color", "red");
+    
+    d3.selectAll(".circle").transition()
+      .duration(3000)
+      .delay(function(d, i) { 
+        return 1000 })
+      .style("left", "1000px")
+      .duration(2000)
+      .style("bottom", "300px");
+  </script>
+</body>
+
+</html>
