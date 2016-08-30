@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello D3.JS</title>
+    
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap-theme.min.css">
+    <style type="text/css">
+      svg {
+        border: 1px solid #ccc;
+      }
+      
+      .line-style line {
+        stroke: red;
+        stroke-linecap: round;
+        stroke-width: 5;
+      }
+      
+      .rectangle-style rect {
+        stroke-width: 1;
+        stroke:steelblue;
+        fill:#888;
+        fill-opacity: .5;
+      }
+      
+      .circle-style circle {
+        stroke-width: 5;
+        stroke:steelblue;
+        fill:#888;
+        fill-opacity: .5;
+      }
+    </style>
+  </head>
+<body>
+  <div class="container">
+    <h1>D3.JS</h1>
+    <h3>Basic SVG</h3>
+    <div class="row">
+      <div class="col-xs-12">
+        <ul>
+          <li>circle: A standard circle with a defned radius and position attributes</li>
+          <li>rect: A standard rectangle with height, width, and position attributes</li>
+          <li>polygon: Any polygon, described by a list of points</li>
+          <li>line: A line with start and end points</li>
+          <li>path: A complex line created through a series of drawing commands</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron">
+          <h4>Demo many Circles</h4>
+          <svg width="200" height="200">
+            <circle cx="60" cy="60" r="50"/>
+            <circle cx ="5" cy="5" r="10"/>
+            <circle cx="25" cy="35" r="45"/>
+            <circle cx="180" cy="180" r="10"/>
+            <circle cx="80" cy="130" r="40"/>
+            <circle cx="50" cy="50" r="5"/>
+            <circle cx="2" cy="2" r="7"/>
+            <circle cx="77" cy="77" r="17"/>
+            <circle cx="100" cy="100" r="40"/>
+            <circle cx="146" cy="109" r="22"/>
+          </svg>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron line-style">
+          <h4>Line</h4>
+          <ul>
+            <li>x1 and y1: The starting x and y coordinates</li>
+            <li>x2 and y2: The ending x and y coordinates</li>
+            <li>stroke: This gives the line a red color</li>
+            <li>stroke-width: This denotes in pixels the width of the line to be drawn</li>
+          </ul>
+          <svg width="200" height="200">
+            <line x1="10" y1="10" x2="100" y2="100" stroke-width="1" stroke="red"/>
+            <line x1="10" y1="100" x2="500" y2="100"/>
+          </svg>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron rectangle-style">
+          <h4>Rectangle</h4>
+          <ul>
+            <li>rx, ry: rounded</li>
+          </ul>
+          <svg width="400" height="200">
+            <rect width="100" height="20" x="40" y="40"></rect>
+            <rect width="200" height="50" x="80" y="100" rx="5" ry="5"></rect>
+          </svg>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron circle-style">
+          <h4>Circle</h4>
+          <svg width="400" height="200">
+            <circle cx="62" cy="62" r="50"></circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="/libs/jquery-3.1.0.min.js"></script>
+  <script src="/libs/d3.min.js"></script>
+  <script type="text/javascript">
+  </script>
+</body>
+
+</html>
