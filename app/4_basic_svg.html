@@ -29,12 +29,19 @@
         fill:#888;
         fill-opacity: .5;
       }
+      
+      .myText{
+        font-size:22px;
+        font-family:Helvetica;
+        stroke-width:4;
+      }
     </style>
   </head>
 <body>
   <div class="container">
     <h1>D3.JS</h1>
     <h3>Basic SVG</h3>
+
     <div class="row">
       <div class="col-xs-12">
         <ul>
@@ -46,6 +53,7 @@
         </ul>
       </div>
     </div>
+
     <div class="row">
       <div class="col-xs-12 col-md-6">
         <div class="jumbotron">
@@ -79,6 +87,9 @@
           </svg>
         </div>
       </div>
+    </div>
+
+    <div class="row">
       <div class="col-xs-12 col-md-6">
         <div class="jumbotron rectangle-style">
           <h4>Rectangle</h4>
@@ -96,6 +107,114 @@
           <h4>Circle</h4>
           <svg width="400" height="200">
             <circle cx="62" cy="62" r="50"></circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron">
+          <h4>Polygon</h4>
+          <p>First, we start at 60,5 and we move to 10,120. Then, we proceed to 115,120 and
+finally return to 60,5 (note that the pen returns to the starting position automatically.)</p>
+          <svg width="400" height="200">
+            <polygon points="60,5 10,120 115,120"/>
+          </svg>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron circle-style">
+          <h4>Path</h4>
+          <ul>
+            <li>M: Put the pen down to start drawing at x = 120 y = 120</li>
+            <li>L: Draw a straight line that connects (120,120) to x = 220 y = 220, then
+draw another straight line that connects (220,220) to x = 420 y = 120</li>
+            <li>Z: Connect the last data point (420,120) to where we started (120,120)</li>
+          </ul>
+          <svg width="400" height="200">
+            <path d="M 60 60 L 120 180, 300 50 Z" stroke="steelblue"
+fill="lightyellow" stroke-width="2"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron">
+          <h4>Paths with curves</h4>
+          <ul>
+            <li>
+              Cubic Bézier
+            </li>
+            <li>
+              Quadratic Bézier
+            </li>
+            <li>
+              Elliptical Arc
+            </li>
+          </ul>
+          <p>C x1 y1 x2 y2 x y</p>
+          <ul>
+            <li>C: Indicates that we are applying a Cubic Bézier curve, just as L in the previous example indicates a straight line</li>
+            <li>x1 and y1: Adds a control point to influence the curve's tangent</li>
+            <li>x2 and y2: Adds a second control point after applying x1 and y1</li>
+            <li>x and y: Indicates the final resting place of the line</li>
+          </ul>
+          <svg width="400" height="200">
+            <path d="M 120 120 L 220 220, C 200 70 480 290 320 120 Z"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron">
+          <h4>Translate</h4>
+          <p>transform="translate(x,y)" - Move the element</p>
+          <svg width="400" height="200">
+            <circle cx="62" cy="62" r="50" transform="translate(50,50)"></circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron">
+          <h4>Scale</h4>
+          <p>Adjust the coordinates for all attributes in the element</p>
+          <svg width="400" height="200">
+            <circle cx="62" cy="62" r="50" stroke-width="5" fill="red" transform="scale(2,2)"></circle>
+          </svg>
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6">
+        <div class="jumbotron">
+          <h4>Grouping</h4>
+          <svg height="500" width="800">
+            <g transform="translate(-200,-100), scale(2,2)">
+              <path d="M 120 120 L 220 220 C 200 70 480 290 320 120 Z">
+              </path>
+              <line x1="220" y1="220" x2="200" y2="70"></line>
+              <circle cx="200" cy="70" r="5" ></circle>
+              <line x1="200" y1="70" x2="480" y2="290"></line>
+              <circle cx="480" cy="290" r="5" ></circle>
+              <line x1="480" y1="290" x2="320" y2="120"></line>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="jumbotron">
+          <h4>Text</h4>
+          <svg width="600" height="600">
+            <text x="250" y="150">Hello world!</text>
+            <text x="250" y="300" class="myText">Hello world!</text>
+            <text x="350" y="100" transform="rotate(45,200,0)" font-family="Verdana"
+            font-size="100">Hello world!</text>
           </svg>
         </div>
       </div>
