@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello D3.JS</title>
+    
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+<body>
+  <div class="container">
+    <h1>D3.JS</h1>
+    <h3>Creating Basic Map</h3>
+    <p><a href="https://github.com/d3/d3-geo">https://github.com/d3/d3-geo</a></p>
+    <p><a href="https://geojson-maps.kyd.com.au/">https://geojson-maps.kyd.com.au/</a></p>
+    <img src="/images/caculate.png" />
+    <div id="map"></div>
+  </div>
+  
+  <script src="/libs/jquery/jquery.min.js"></script>
+  <script src="/libs/d3/d3.min.js"></script>
+  <script src="/libs/topojson/topojson.min.js"></script>
+  <script type="text/javascript">
+    var height = 600;
+    var width = 900;
+    /*basically a mapping of latitude and longitude to coordinates. You can think of a projection as
+    a way to map the three-dimensional globe to a flat plane. There are many kinds of
+    projections, but geo.mercator is normally the default value you will use*/
+    
+    /*If you were making a map of the USA, you could use a better projection called albersUsa*/
+    var projection = d3.geoMercator();
+    var path = d3.geoPath().projection(projection);
+    var svg = d3.select("#map")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      
+    d3.json('/data/uk.json', function(data) {
+      //Type: topology
+      console.log('uk', data);
+      /*
+      This stands for the administrative areas
+      of uk. It is important to understand the geographic data you are using, because
+      other data sources might have different names for the administrative areas property
+      */
+      var states = topojson.feature(data, data.objects.subunits);
+      console.log('states', states);
+      // Setup the scale and translate
+      projection.scale(1).translate([0, 0]);
+      
+      /*This algorithm is quite useful. The bounding box is a spherical box that returns
+      a two-dimensional array of min/max coordinates, inclusive of the geographic
+      data passed*/
+      
+      //Bounding box
+      /*The bounding box is represented by a two-dimensional array: [[left, bottom],
+      [right, top]], where left is the minimum longitude, bottom is the minimum latitude,
+      right is maximum longitude, and top is the maximum latitude*/
+      var b = path.bounds(states);
+      //Bound to only 1 state
+      //***var b = path.bounds(states.features[2]);
+
+      //Scale
+      /*The scale is calculated by taking the longest geographic edge of our bounding box
+      and dividing it by the number of pixels of this edge in the visualization*/
+      var s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+      /*The value 95 adjusts the scale, because we are giving the map a bit of a breather
+      on the edges in order to not have the paths intersect the edges of the SVG container
+      item, basically reducing the scale by 5 percent.*/
+      
+      //Translate
+      //After scale return the map to center of screen
+      /*We will calculate x by finding
+      the center (topRight – topLeft)/2 and multiplying it by the scale. The result is then
+      subtracted from the width of the SVG element.*/
+      var t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+      
+      projection.scale(s).translate(t);
+      
+      // group all of the following SVG elements into a <g> SVG tag
+      var map = svg.append('g').attr('class', 'boundary');
+      
+      var uk = map.selectAll('path').data(states.features);
+      
+      //Add choropleths
+      /*
+        we created a new function
+        called color. This color function looks for any number between 0 and 33 in an
+        input domain. D3 linearly maps these input values to a color between red and yellow
+        in the output range. D3 has included the capability to automatically map colors in a
+        linear range to a gradient. This means that executing the new function, color, with 0
+        will return the color red, color(15) will return an orange color, and color(33) will
+        return yellow.*/
+      /*https://github.com/d3/d3/blob/master/API.md#scales-d3-scale*/
+      var color = d3.scaleLinear().domain([0,6]).range(['red', 'yellow']);
+      
+      //enter
+      uk.enter()
+        .append('path')
+        .attr('d', path)//Add choropleths
+        .attr('fill', function(d,i) {
+          console.log(d);
+          console.log(i);
+          return color(i)
+      });
+
+      uk.exit().remove();
+    });
+  </script>
+</body>
+
+</html>

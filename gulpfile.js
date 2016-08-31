@@ -10,7 +10,7 @@ gulp.task('connect', function() {
 });
  
 gulp.task('html', function () {
-  gulp.src('./app/*.html')
+  gulp.src('./app/*')
     .pipe(connect.reload());
 });
 
@@ -23,6 +23,9 @@ gulp.task('lib', function () {
   
   gulp.src('./node_modules/jquery/dist/**/*')
   .pipe(gulp.dest('./app/libs/jquery'));
+  
+  gulp.src('./node_modules/topojson/build/**/*')
+  .pipe(gulp.dest('./app/libs/topojson'));
 })
  
 gulp.task('watch', function () {
