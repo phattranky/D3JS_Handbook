@@ -13,6 +13,17 @@ gulp.task('html', function () {
   gulp.src('./app/*.html')
     .pipe(connect.reload());
 });
+
+gulp.task('lib', function () {
+  gulp.src('./node_modules/bootstrap/dist/**/*')
+  .pipe(gulp.dest('./app/libs/bootstrap'));
+  
+  gulp.src('./node_modules/d3/build/**/*')
+  .pipe(gulp.dest('./app/libs/d3/'));
+  
+  gulp.src('./node_modules/jquery/dist/**/*')
+  .pipe(gulp.dest('./app/libs/jquery'));
+})
  
 gulp.task('watch', function () {
   gulp.watch(['./app/*.html'], ['html']);
