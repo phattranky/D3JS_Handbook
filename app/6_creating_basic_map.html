@@ -94,17 +94,38 @@
       /*https://github.com/d3/d3/blob/master/API.md#scales-d3-scale*/
       var color = d3.scaleLinear().domain([0,6]).range(['red', 'yellow']);
       
+      //Adding click event
+      var geoID = function(d) {
+        //Identify id
+        return d.id;
+      };
+      
+      var curUk;
+      var click = function(d) {
+        curUk.attr('fill-opacity', 0.2); // Another update!
+        d3.select('#' + geoID(d)).attr('fill-opacity', 1);
+      };
+      
       //enter
-      uk.enter()
+      curUk = uk.enter()
         .append('path')
         .attr('d', path)//Add choropleths
         .attr('fill', function(d,i) {
           console.log(d);
           console.log(i);
           return color(i)
-      });
+        })//Add click event
+        .attr('id', geoID)
+        .on("click", click);
 
       uk.exit().remove();
+      
+      //Auto Transition style
+      setInterval(function(){
+        curUk.transition().duration(500).style('fill', function(d) {
+          return color(Math.floor((Math.random() * 6) + 1));
+        });
+      },2000);
     });
   </script>
 </body>
