@@ -1,8 +1,8 @@
 # D3JS HandBook
 
 [![Build Status](https://travis-ci.org/phattranky/D3JS_Handbook.svg?branch=master)](https://travis-ci.org/phattranky/D3JS_Handbook.svg?branch=master)
-[![dependencies](https://david-dm.org/davezuko/react-redux-starter-kit.svg)](https://david-dm.org/phattranky/D3JS_Handbook)
-[![devDependency Status](https://david-dm.org/davezuko/react-redux-starter-kit/dev-status.svg)](https://david-dm.org/phattranky/D3JS_Handbook#info=devDependencies)
+[![dependencies](https://david-dm.org/phattranky/D3JS_Handbook.svg)](https://david-dm.org/phattranky/D3JS_Handbook)
+[![devDependency Status](https://david-dm.org/phattranky/D3JS_Handbook.svg)](https://david-dm.org/phattranky/D3JS_Handbook#info=devDependencies)
 
 ##Reference Links
 
