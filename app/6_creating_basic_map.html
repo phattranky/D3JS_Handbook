@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/style.css">
+    <style type="text/css">
+      text {
+        font-family: Helvetica;
+        font-weight: 300;
+        font-size: 12px;
+      }
+    </style>
   </head>
 <body>
   <div class="container">
@@ -35,7 +42,7 @@
       .attr("width", width)
       .attr("height", height)
       
-    d3.json('/data/uk.json', function(data) {
+    d3.json('/data/geo-data.json', function(data) {
       //Type: topology
       console.log('uk', data);
       /*
@@ -43,7 +50,9 @@
       of uk. It is important to understand the geographic data you are using, because
       other data sources might have different names for the administrative areas property
       */
-      var states = topojson.feature(data, data.objects.subunits);
+      //var states = topojson.feature(data, data.objects.subunits);
+      console.log(data);
+      var states = topojson.feature(data, data.objects.MEX_adm1);
       console.log('states', states);
       // Setup the scale and translate
       projection.scale(1).translate([0, 0]);
@@ -63,7 +72,7 @@
       //Scale
       /*The scale is calculated by taking the longest geographic edge of our bounding box
       and dividing it by the number of pixels of this edge in the visualization*/
-      var s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
+      var s = .80 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
       /*The value 95 adjusts the scale, because we are giving the map a bit of a breather
       on the edges in order to not have the paths intersect the edges of the SVG container
       item, basically reducing the scale by 5 percent.*/
@@ -92,18 +101,19 @@
         will return the color red, color(15) will return an orange color, and color(33) will
         return yellow.*/
       /*https://github.com/d3/d3/blob/master/API.md#scales-d3-scale*/
-      var color = d3.scaleLinear().domain([0,6]).range(['red', 'yellow']);
+      var color = d3.scaleLinear().domain([0,33]).range(['red', 'yellow']);
       
       //Adding click event
       var geoID = function(d) {
         //Identify id
-        return d.id;
+        //return d.id;
+        return 'c' + d.properties.ID_1;
       };
       
       var curUk;
       var click = function(d) {
         curUk.attr('fill-opacity', 0.2); // Another update!
-        d3.select('#' + geoID(d)).attr('fill-opacity', 1);
+        d3.select('#c' + geoID(d)).attr('fill-opacity', 1);
       };
       
       //enter
@@ -123,9 +133,34 @@
       //Auto Transition style
       setInterval(function(){
         curUk.transition().duration(500).style('fill', function(d) {
-          return color(Math.floor((Math.random() * 6) + 1));
+          return color(Math.floor((Math.random() * 33) + 1));
         });
       },2000);
+
+      var radius = d3.scaleLinear().domain([0,100]).range([5,30]);
+      
+      //Add cities with CSV
+      d3.csv('/data/cities.csv', function(cities) {
+        console.log("Cities", cities);
+        var cityPoints = svg.selectAll('circle').data(cities);
+        var cityText = svg.selectAll('text').data(cities);
+        cityPoints.enter()
+          .append('circle')
+          .attr('cx', function(d) {
+            return projection([d.lon, d.lat])[0]
+          })
+          .attr('cy', function(d) {return projection([d.lon, d.lat])[1]})
+          .attr('r', function(d) {return radius(d.tequila); })
+          .attr('fill', 'steelblue');
+          
+        cityText.enter()
+          .append('text')
+          .attr('x', function(d) {return projection([d.lon, d.lat])[0]})
+          .attr('y', function(d) {return projection([d.lon, d.lat])[1]})
+          .attr('dx', 5)
+          .attr('dy', 3)
+          .text(function(d) {return d.name});
+      });
     });
   </script>
 </body>
