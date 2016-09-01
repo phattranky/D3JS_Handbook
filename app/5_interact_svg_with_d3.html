@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello D3.JS</title>
+    
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/libs/bootstrap/css/bootstrap-theme.min.css">
+    <style type="text/css">
+      svg {
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+<body>
+  <div class="container">
+    <h1>D3.JS</h1>
+    <h3>Interact SVG with D3</h3>
+    <p>Call enter section once first time</p>
+    <p>Every second. Because the structure is the same, the enter section is now skipped and
+only update is reapplied to the existing rectangles</p>
+    <p>When change data (change number of record). if there are more data elements than DOM elements, the enter() section will be invoked. If there are 
+    fewer data elements than DOM elements, the exit() section will be invoked</p>
+    <div id="svg"></div>
+  </div>
+  
+  <script src="/libs/jquery/jquery.min.js"></script>
+  <script src="/libs/d3/d3.min.js"></script>
+  <script type="text/javascript">
+    
+    function makeData(n){
+      var arr = [];
+      for (var i=0; i<n; i++){
+        arr.push({
+          x:Math.floor((Math.random() * 500) + 1),
+          y:Math.floor((Math.random() * 500) + 1),
+          width:Math.floor((Math.random() * 300) + 1),
+          height:Math.floor((Math.random() * 300) + 1)
+        })
+      };
+      return arr;
+    }
+    
+    var svg = d3.select('#svg')
+      .append('svg')
+      .attr('width', 500)
+      .attr('height', 500);
+      
+    // svg.append('rect')
+    //   .attr('x', 10)
+    //   .attr('y', 10)
+    //   .attr('width', 50)
+    //   .attr('height', 100);
+      
+    // svg.append('rect')
+    //   .attr('x', 30)
+    //   .attr('y', 30)
+    //   .attr('width', 50)
+    //   .attr('height', 100);
+    var rectangles = function() {
+      //var data = makeData(4); //Only test in case not change number of record
+      var data = makeData((Math.random() * 5) + 1);
+      //Enter: Define a starting point with attached data
+      var rect = svg.selectAll('rect').data(data);
+      
+      rect
+        .enter()
+        .append('rect')
+        .attr('x', function(d){
+          return d.x; 
+        })
+        .attr('y', function(d){ 
+          return d.y; 
+        })
+        .attr('width', function(d){
+          return d.width; 
+        })
+        .attr('height', function(d){ 
+          return d.height; 
+        })
+        .attr('test', function(d, i) {
+          //Only call when firsttime and number of record change
+          console.log('Created x position to: ', d.x)
+        });
+        
+      // Update: Everytime data change
+      rect.transition().duration(500).attr('x', function(d){
+        return d.x; })
+        .attr('y', function(d){ return d.y; })
+        .attr('width', function(d){ return d.width; })
+        .attr('height', function(d){ return d.height; })
+        .attr('test', function(d, i) {
+        // update every data change
+        console.log('updating x position to: ', d.x)
+      });
+      
+      // Exit
+      rect.exit().attr('test', function(d) {
+        console.log('no data...')
+      }).remove();
+    };
+    
+    setInterval(function(){
+      //Only enter called once
+      //Because the structure is the same, the enter section is now skipped and
+      //only update is reapplied to the existing rectangles
+      rectangles();
+    },1000);              
+
+  </script>
+</body>
+
+</html>
