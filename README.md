@@ -12,6 +12,11 @@
 * http://chimera.labs.oreilly.com/books/1230000000345/index.html
 * https://github.com/d3/d3/wiki/Gallery
 
+##GEO Data Resources
+* Shapefiles: http://www.diva-gis.org/gdata
+* GeoJSON: http://geojson.org
+* Topojson: https://github.com/mbostock/topojson/wiki/Command-Line-Reference
+
 ## To use
 
 ```sh

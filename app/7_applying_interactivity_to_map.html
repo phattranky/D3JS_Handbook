@@ -12,9 +12,28 @@
         font-weight: 300;
         font-size: 12px;
       }
+      #tooltip{
+        position: absolute;
+        z-index: 2;
+        background: rgba(0,153,76,0.8);
+        width:130px;
+        color:white;
+        font-size: 14px;
+        padding:5px;
+        top:-150px;
+        left:-150px;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+        "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      }
+      
+      .overlay {
+        fill: none;
+        pointer-events: all;
+      }
     </style>
   </head>
 <body>
+  <div id="tooltip"></div>
   <div class="container">
     <h1>D3.JS</h1>
     <h3>Creating Basic Map</h3>
@@ -27,6 +46,8 @@
   <script src="/libs/jquery/jquery.min.js"></script>
   <script src="/libs/d3/d3.min.js"></script>
   <script src="/libs/topojson/topojson.min.js"></script>
+  <script src="/base.js"></script>
+  <script src="/sparkline.js"></script>
   <script type="text/javascript">
     var height = 600;
     var width = 900;
@@ -116,6 +137,17 @@
         d3.select('#' + geoID(d)).attr('fill-opacity', 1);
       };
       
+      var hover = function(d) {
+        var div = document.getElementById('tooltip');
+        div.style.left = event.pageX +'px';
+        div.style.top = event.pageY + 'px';
+        div.innerHTML = d.properties.NAME_1;
+        
+        //Get data from Db set below, then draw sparkline
+        var id = geoID(d);
+        d3.select("#tooltip").datum(db.get(id)).call(sparkline.draw);
+      };
+      
       //enter
       curUk = uk.enter()
         .append('path')
@@ -126,16 +158,17 @@
           return color(i)
         })//Add click event
         .attr('id', geoID)
-        .on("click", click);
+        .on("click", click)
+        .on("mouseover", hover);
 
       uk.exit().remove();
       
       //Auto Transition style
-      setInterval(function(){
-        curUk.transition().duration(500).style('fill', function(d) {
-          return color(Math.floor((Math.random() * 33) + 1));
-        });
-      },2000);
+      // setInterval(function(){
+      //   curUk.transition().duration(500).style('fill', function(d) {
+      //     return color(Math.floor((Math.random() * 33) + 1));
+      //   });
+      // },2000);
 
       var radius = d3.scaleLinear().domain([0,100]).range([5,30]);
       
@@ -161,7 +194,45 @@
           .attr('dy', 3)
           .text(function(d) {return d.name});
       });
+      
+      //Add Sparkline to tooltip
+      var db = d3.map(); //Get hashmap
+      var sparkline = d3.charts.sparkline().height(50).width(138);
+      var setDb = function(data) {
+        data.forEach(function(d) {
+          //Set data key_value to Db
+          db.set(d.geoID, [
+            {"x": 1, "y": +d.q1},
+            {"x": 2, "y": +d.q2},
+            {"x": 3, "y": +d.q3},
+            {"x": 4, "y": +d.q4}
+          ]);
+        });
+      };
+      
+      //Zooming
+      var zoomed = function () {
+        console.log(d3.event);
+        var transform = d3.event.transform;
+        map.attr("transform", "translate(" + transform.x + "," + transform.y + ") scale(" + transform.k + ")");
+      };
+      var zoom = d3.zoom()
+        .scaleExtent([1, 8])
+        .on("zoom", zoomed);
+
+      svg.append("rect")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .call(zoom);
+      
+      //Set Db from CSV file
+      d3.csv('/data/states-data.csv', function(data) {
+        setDb(data);
+      });
+      
     });
+
   </script>
 </body>
 
